@@ -6,6 +6,10 @@ import sys
 COLORS = {
     'BLUE': '\033[94m',
     'GREEN': '\033[92m',
+    'RED': '\033[91m',
+    'YELLOW': '\033[93m',
+    'MAGENTA': '\033[95m',
+    'CYAN': '\033[96m',
     'INFO': '\033[96m',
     'RESET': '\033[0m'
 }
@@ -40,9 +44,26 @@ def print_lesson(title, text):
     print("\n")
 
 def play_two_channel_sbs():
-    print_slow("=== 2-CHANNEL SBS SIMULATOR ===")
-    print_slow("Initializing Flow Cell Cluster (1,000 molecules)...")
+    print_slow("=== 2-CHANNEL Illumina SBS SIMULATOR ===")
+    print_slow("Initializing Flow Cell Cluster (1,000 molecules)...\n")
+    time.sleep(0.5)
+
+    # --- EDUCATIONAL CRASH COURSE (Now Colorized!) ---
+    print(f"{COLORS['INFO']}=== HOW SBS WORKS ==={COLORS['RESET']}")
+    print(f"{COLORS['CYAN']}• Sequencing by Synthesis (SBS):{COLORS['RESET']} A polymerase builds a complementary DNA strand one base at a time.")
+    print(f"{COLORS['MAGENTA']}• Reversible Terminators:{COLORS['RESET']} Every nucleotide has a fluorescent dye AND a chemical block.")
+    print(f"{COLORS['YELLOW']}• The Block:{COLORS['RESET']} This ensures the polymerase can only add EXACTLY ONE base per cycle.")
+    print(f"{COLORS['GREEN']}• The Flash:{COLORS['RESET']} Lasers excite the dye, and cameras snap a picture to identify the base.\n")
     
+    print(f"{COLORS['INFO']}=== CRITICAL BIOCHEMISTRY ==={COLORS['RESET']}")
+    print(f"{COLORS['CYAN']}• Cleavage:{COLORS['RESET']} A chemical wash that snips off the dye and the terminator block, exposing the 3' OH group so the next base can attach.")
+    print(f"{COLORS['RED']}• Phasing:{COLORS['RESET']} The enemy of sequencing! If cleavage fails on a molecule, it falls one cycle behind the rest of the cluster.")
+    print(f"{COLORS['MAGENTA']}• Pre-Phasing:{COLORS['RESET']} If a nucleotide was missing its block, a molecule jumps one cycle ahead.")
+    print(f"{COLORS['YELLOW']}• The Result:{COLORS['RESET']} Out-of-sync molecules create background noise, eventually destroying the Q-score!\n")
+    print(f"{COLORS['INFO']}============================={COLORS['RESET']}\n")
+    
+    input("Press [ENTER] to review the optics key...")
+
     # Color Key Explanation
     print("\n--- 2-CHANNEL OPTICS KEY ---")
     print(f"{COLORS['BLUE']}Cytosine (C) = Blue Image Only{COLORS['RESET']}")
@@ -85,7 +106,6 @@ def play_two_channel_sbs():
             elif base == 'A':
                 blue_signal += intensity
                 green_signal += intensity
-            # G adds nothing (Dark)
             
         add_signal(current_base, sync)
         if prev_base: add_signal(prev_base, phased)
@@ -96,7 +116,6 @@ def play_two_channel_sbs():
         b_bar = "█" * int(blue_signal * 20)
         g_bar = "█" * int(green_signal * 20)
         
-        # Only show > 1% to avoid terminal clutter
         if blue_signal < 0.01: b_bar = ""
         if green_signal < 0.01: g_bar = ""
             
@@ -108,15 +127,15 @@ def play_two_channel_sbs():
         called_sequence += call
         
         if call != current_base:
-            print(f"\033[91mWARNING: Incorrect base call! Expected {current_base}.\033[0m")
+            print(f"{COLORS['RED']}WARNING: Incorrect base call! Expected {current_base}.{COLORS['RESET']}")
         else:
             print("Base call accepted.")
 
         # 4. CLEAVAGE 
-        cleave_action = input("Type 'cleave' to remove terminators and fluorophores: ").strip().lower()
+        cleave_action = input("Type 'cleave' to chemical wash terminators and fluorophores: ").strip().lower()
         
         if cleave_action != 'cleave':
-            print("\033[91mCRITICAL ERROR: Cleavage skipped! Heavy phasing introduced.\033[0m")
+            print(f"{COLORS['RED']}CRITICAL ERROR: Cleavage skipped! Heavy phasing introduced.{COLORS['RESET']}")
             penalty = sync * 0.20
             sync -= penalty
             phased += penalty
@@ -165,3 +184,4 @@ if __name__ == "__main__":
         play_two_channel_sbs()
     except KeyboardInterrupt:
         print("\nRun aborted.")
+
