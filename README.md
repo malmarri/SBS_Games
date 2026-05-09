@@ -8,27 +8,26 @@ Instead of just looking at a FASTQ file, you take the driver's seat as both the 
 
 ## 🕹️ Key Features
 
-### 1. Dual Chemistry Modes
+### 1. Dual Chemistry Modes (`SBS.simulator.py`)
 Choose between the two primary detection systems used in modern genomics:
 - **4-Channel Chemistry (e.g., MiSeq/HiSeq):** A traditional 1-to-1 mapping where each base (A, T, C, G) has its own unique fluorescent dye.
-- **2-Channel Chemistry (e.g., NextSeq/NovaSeq):** A faster, more complex system using only two optical sensors (Blue and Green) to identify four bases through signal combinations—including the infamous **"Dark G"**.
+- **2-Channel Chemistry (e.g., NextSeq/NovaSeq):** A faster, more complex system using only two optical sensors (Blue and Green).
 
-### 2. The Phasing & Pre-phasing Model
-The game simulates a "cluster" of 1,000 identical DNA molecules. As cycles progress, your cluster will naturally lose synchronicity:
-- **Phasing:** Some molecules fail to cleave their terminators and fall one cycle behind.
-- **Pre-phasing:** Some molecules fail to incorporate a terminator and jump one cycle ahead.
-Watch your "Optical Sensor Output" get "muddier" as the run progresses, perfectly illustrating why Phred Q-scores drop at the end of a read.
+### 2. Loading Optimization (`cluster_density.py`)
+Master the first step of any run: **Loading Concentration**.
+- Seed clusters onto a 10x10 flowcell grid.
+- Balance between low yield (underclustering) and overlapping signals (overclustering).
+- Calculate your **Pass Filter (PF)** rate and see how much usable data you produced.
 
-### 3. Interactive Fluidics Control
-You aren't just calling bases. After every incorporation, you must manually trigger the **Cleave** step. 
-- **Success:** Keeps your cluster mostly in sync.
-- **Failure:** Skip a cleave, and your cluster dephases rapidly, making future base calls nearly impossible.
+### 3. Index Hopping & Demultiplexing (`index_hopping.py`)
+Sequence the 8bp sample barcode in a multiplexed pool.
+- Experience the "interference" from other samples.
+- See how miscalling a single base in the index leads to **Index Hopping**, where a read is assigned to the wrong sample.
 
-### 4. Embedded Micro-Lessons
-At key milestones (Cycles 5, 10, 15, and 20), the game pauses to explain the science behind what you're seeing:
-- How Reversible Terminators work.
-- The physics of Bridge Amplification.
-- The mathematical derivation of Phred Quality Scores.
+### 4. Paired-End Bridge Turn (`paired_end_bridge.py`)
+Flip the physical molecules to sequence the reverse side.
+- Watch a text-based simulation of **Bridge Amplification**.
+- Experience why **Read 2 (R2)** always has higher noise and lower quality scores than Read 1.
 
 ---
 
@@ -44,9 +43,12 @@ At key milestones (Cycles 5, 10, 15, and 20), the game pauses to explain the sci
    cd SBS_Games
    ```
 
-2. **Run the simulator:**
+2. **Choose your game:**
    ```bash
-   python3 SBS.simulator.py
+   python3 cluster_density.py    # Master loading
+   python3 SBS.simulator.py      # Call bases and manage fluidics
+   python3 index_hopping.py      # Resolve sample barcodes
+   python3 paired_end_bridge.py  # Sequence the reverse strand
    ```
 
 ---
