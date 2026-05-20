@@ -1,4 +1,4 @@
-# SBS_Games: The Illumina Sequencing Simulator 🧬
+# SBS_Games: The Illumina Sequencing Simulator 
 
 **SBS_Games** is an interactive, terminal-based educational game designed to teach the complex biochemistry, optics, and physics behind **Illumina Sequencing by Synthesis (SBS)**.
 
@@ -6,7 +6,7 @@ Instead of just looking at a FASTQ file, you take the driver's seat as both the 
 
 ---
 
-## 🕹️ Key Features
+## Key Features
 
 ### 1. Dual Chemistry Modes (`SBS.simulator.py`)
 Choose between the two primary detection systems used in modern genomics:
@@ -31,7 +31,7 @@ Flip the physical molecules to sequence the reverse side.
 
 ---
 
-## 🚀 Installation & Usage
+## Installation & Usage
 
 ### Prerequisites
 - **Python 3.x**
@@ -65,12 +65,7 @@ Flip the physical molecules to sequence the reverse side.
 ---
 
 ## 🎓 Educational Goals
-- Understand why deamination and dephasing limit read length.
+- Understand why phasing issues limit read length.
 - Learn the difference between raw signal intensity and "called" bases.
 - Visualize how 2-channel chemistry simplifies optics but complicates interpretation.
 - Connect the physical process of fluidics to the quality of the final data.
-
----
-
-**Developed by:** Mohamed Al-Marri
-**License:** MIT
